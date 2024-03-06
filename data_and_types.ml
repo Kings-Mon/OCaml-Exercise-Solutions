@@ -1,8 +1,12 @@
+(* Exercise problems of - " Data And Types " *)
+(* =================================================================================================================================== *)
+
 (*The product of all the elements in a list.*)
 let rec product = function
 | [] -> 1
 | h :: t -> h * product t;;
 (*val product : int list -> int = <fun>*)
+
 
 (*Concatenates all the strings in a list.*)
 let rec concatinate_string = function
@@ -10,6 +14,7 @@ let rec concatinate_string = function
 | h :: t -> h ^ concatinate_string t;;
 (*val concatinate_string : string list -> string = <fun>*)
 (*let concatinate_integer lst = List.concat lst;;*)
+
 
 (* Using pattern matching, write three functions, that checks -
 • the list’s first element is "bigred"
@@ -30,6 +35,7 @@ let first_two_equal = function
 | _ -> false;;
 (*val first_two_equal : 'a list -> bool = <fun>*)
 
+
 (*A function that returns the fifth element of that list*)
 let fifth_element_check lst = 
   if List.length lst >= 5 
@@ -37,29 +43,33 @@ let fifth_element_check lst =
   else 0;;
 (*val fifth_element_check : int list -> int = <fun>*)
 
-(*A function that returns returns the list sorted in descending order*)
+
+(*A function that returns the list sorted in descending order*)
 let decending_sort lst =
   List.sort (fun x y -> Stdlib.compare y x) lst;;
 (*val decending_sort : 'a list -> 'a list = <fun>*)
 
+
 (*A function that returns the last element of a list.*)
 let last_element_return lst = List.hd (List.rev lst);;
 (*val last_element : 'a list -> 'a = <fun>*)
-(*Alternated version :-
-let last_element_return n lst =
+
+(*Alternated version, which takes the list length :- *)
+let last_element_return_1 n lst =
   if List.length lst = n 
-    then List.nth lst n-1
+    then List.nth lst (n - 1)
   else 0;;
-(*val last_element_return : int list -> int -> int = <fun>*)
-*)
+(*val last_element_return_1 : int -> int list -> int = <fun>*)
+
 
 (*A function that returns true if and only if the input list contains at least one 0.*)
 let any_zeroes lst = List.exists (fun x -> x = 0) lst;;
 (*val any_zeroes : int list -> bool = <fun>*)
-(* Alternatively,
-let any_zeroes lst = List.mem 0 lst;;
-(*val any_zeroes : int list -> bool = <fun>*)
-*)
+
+(* Alternatively, *)
+let any_zeroes_1 lst = List.mem 0 lst;;
+(*val any_zeroes_1 : int list -> bool = <fun>*)
+
 
 (*A function that returns the first n elements of lst.*)
 let rec take n lst = match n, lst with
@@ -68,6 +78,7 @@ let rec take n lst = match n, lst with
 | n, h :: t -> h :: take (n-1) t;;
 (*val take : int -> 'a list -> 'a list = <fun>*)
 
+
 (*A function that returns all but the first n elements of lst.*)
 let rec drop n lst = match n, lst with
 | 0, _ -> lst
@@ -75,7 +86,8 @@ let rec drop n lst = match n, lst with
 | n, _ :: t -> drop (n-1) t;;
 (*val drop : int -> 'a list -> 'a list = <fun>*)
 
-(*Tail Recursive Versions :- *)
+
+(*Tail Recursive Versions of take and drop :- *)
 
 let take n lst = 
   let rec take_tail n acc lst = 
@@ -95,7 +107,7 @@ let drop n lst =
     | n , _ :: t -> drop_tail (n-1) t
   in
   drop_tail n lst;;
-(**)
+(*val drop : int -> 'a list -> 'a list = <fun>*)
 
 (*List Creation :- *)
 let create_lst n = List.init n (fun x -> x);;
@@ -150,11 +162,13 @@ take 200 lst_1000;;
  184; 185; 186; 187; 188; 189; 190; 191; 192; 193; 194; 195; 196; 197; 198;
  199]*)
 
+(* #################################################################################### *)
 
-(*A unimodal list is a list that monotonically increases to some maximum value then monotonically decreases
-after that value. Either or both segments (increasing or decreasing) may be empty. A constant list is unimodal, as is the
-empty list.*)
-(*A function that takes an integer list and returns whether that list is unimodal.*)
+
+(*A unimodal list is a list that monotonically increases to some maximum value then monotonically decreases after that value. 
+Either or both segments (increasing or decreasing) may be empty. 
+A constant list is unimodal, as is the empty list.*)
+(* // A function that takes an integer list and returns whether that list is unimodal. // *)
 let rec is_unimodal lst = match lst with
 | [] | [_] -> true (*Empty list and single-element list are unimodal*)
 | x :: y :: t -> 
@@ -174,6 +188,7 @@ let rec is_unimodal lst = match lst with
     find_max_and_check t x;;
 (*val is_unimodal : 'a list -> bool = <fun>*)
 
+
 (*A function that takes a set S represented as a list and returns the set of all subsets of S.*)
 let rec powerset s = match s with
 | [] -> [[]]
@@ -181,6 +196,7 @@ let rec powerset s = match s with
   let rest_set = powerset rest in
   rest_set @ List.map (fun subset -> x :: subset) rest_set;;
 (*val powerset : 'a list -> 'a list list = <fun>*)
+
 
 (*A function that prints its input list, one number per line.*)
 let rec print_int_list = function
@@ -203,8 +219,7 @@ type student = {first_name : string; last_name : string; gpa : float};;
 • string -> string -> float -> student (a function that creates a student record) *)
 
 let example_student : student = {first_name = "Kingshuk"; last_name = "Mondal"; gpa = 8.1}
-(*val example_student : student =
-  {first_name = "Kingshuk"; last_name = "Mondal"; gpa = 8.1}*)
+(*val example_student : student = {first_name = "Kingshuk"; last_name = "Mondal"; gpa = 8.1}*)
 
 let extract_name : student -> string * string = 
   fun s -> (s.first_name, s.last_name);;
@@ -295,6 +310,7 @@ let is_before (year1, month1, day1) (year2, month2, day2) =
 is_before (2018, 5, 16) (2018, 5, 20);;
 (*- : bool = true*)
 
+
 (*A function evaluates to None if the input list is empty, and to Some d if date d is the earliest date in the list.*)
 let earliest dates = match dates with
 | [] -> None
@@ -319,6 +335,7 @@ earliest [(2003, 2, 1); (2003, 1, 15); (2003, 3, 10); (2003, 10, 29)];;
 (* Insert function to add key-value pair to association list *)
 let insert k v lst = (k, v) :: lst;;
 (*val insert : 'a -> 'b -> ('a * 'b) list -> ('a * 'b) list = <fun>*)
+
 insert 1 "one" (insert 2 "two" (insert 3 "three" (insert 4 "four"[])));;
 (*- : (int * string) list = [(4, "four"); (3, "three"); (2, "two"); (1, "one")]*)
 [] |> insert 1 "one" |> insert 2 "two" |> insert 3 "three" |> insert 4 "four";;
@@ -504,3 +521,5 @@ let quadrant_when1 : int * int -> [> `I | `II | `III | `IV ] option = function
 (*val quadrant_when1 : int * int -> [> `I | `II | `III | `IV ] option = <fun>*)
 (*Exmaple - *)
 quadrant_when1 (6, -9);;
+
+(* ======================================================================================================================================= *)

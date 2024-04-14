@@ -1,5 +1,5 @@
-(* Exercise problems of - " Data And Types " *)
-(* =================================================================================================================================== *)
+(* Exercise problems - " Data And Types " *)
+(* ======================================================================================================================= *)
 
 (*The product of all the elements in a list.*)
 let rec product = function
@@ -13,7 +13,8 @@ let rec concatinate_string = function
 | [] -> ""
 | h :: t -> h ^ concatinate_string t;;
 (*val concatinate_string : string list -> string = <fun>*)
-(*let concatinate_integer lst = List.concat lst;;*)
+(* To concatenate a list of lists of integers into a single list of integers --
+let concatinate_integer lst = List.concat lst;;*)
 
 
 (* Using pattern matching, write three functions, that checks -
@@ -271,7 +272,8 @@ let pokemon_list = [
   [{name = "Charizard"; hp = 78; ptype = Fire};
    {name = "Squirtle"; hp = 44; ptype = Water};
    {name = "Blastoise"; hp = 79; ptype = Water};
-   {name = "Pikachu"; hp = 35; ptype = Normal}]*)
+   {name = "Pikachu"; hp = 35; ptype = Normal}]
+*)
 
 max_hp pokemon_list;;
 (*- : pokemon option = Some {name = "Blastoise"; hp = 79; ptype = Water} *)

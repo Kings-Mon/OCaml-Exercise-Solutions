@@ -1,3 +1,6 @@
+(* Exercise problems - " Higher Order Programming " *)
+(* ======================================================================================================================= *)
+
 (* 1. *)
 let double x = 2*x
 (*val double : int -> int = <fun>*)
@@ -10,9 +13,11 @@ let quad = twice double
 let fourth = twice square
 (*val fourth : int -> int = <fun>*)
 
+
 (*2.*)
 let ( $ ) f x = f x
 (*val ( $ ) : ('a -> 'b) -> 'a -> 'b = <fun>*)
+
 
 (*3.*)
 let ( @@ ) f g x = x |> g |> f
@@ -51,17 +56,25 @@ let product_left1 = List.fold_left ( *. ) 1.0 ;;
 let product_right1 = ListLabels.fold_right ~f:( *. ) ~init:1.0 ;;
 (*val product_right1 : float list -> float = <fun>*)
 
+
 (*7. A function sum_cube_odd n that computes the sum of the cubes of all the odd numbers between 0 and n inclusive.*)
 let sum_cube_odd n = 
   let odd_numbers = List.filter (fun x -> x mod 2 <> 0) (List.init (n + 1) (fun x -> x)) in
   let cubes = List.map (fun x -> x * x * x) odd_numbers in
   List.fold_left (+) 0 cubes
+(* OR *)
+let sum_cube_odd n =
+  let is_odd x = x mod 2 <> 0 in
+  let odd_numbers = List.filter is_odd (List.init (n + 1) (fun x -> x)) in
+  let cube x = x * x * x in
+  List.fold_left (+) 0 (List.map cube odd_numbers)
 (*val sum_cube_odd : int -> int = <fun>*)
-(* Simple version using recursion - *)
+
+(* More simple version using recursion - *)
 let rec sum_cube_odd1 n = 
   if n <= 0 then 0
   else if n mod 2 <> 0
-    then n*n*n + sum_cube_odd1 (n - 1)
+    then n * n * n + sum_cube_odd1 (n - 1)
   else 
     sum_cube_odd1 (n - 1)
 (*val sum_cube_odd1 : int -> int = <fun>*)
@@ -106,10 +119,9 @@ exists_fold is_even [3;5;7;9];;
 (*10. A function which, given a list of numbers representing debits, deducts them from an account balance, 
 and finally returns the remaining amount in the balance. Write three versions: fold_left, fold_right, 
 and a direct recursive implementation.*)
-let rec remaining_balance balance debits = 
-  match debits with
-  | [] -> balance
-  | debit :: rest -> remaining_balance (balance - debit) rest
+let rec remaining_balance balance debits = match debits with
+| [] -> balance
+| debit :: rest -> remaining_balance (balance - debit) rest
 (*val remaining_balance : int -> int list -> int = <fun>*)
 
 let remaining_balance1 balance debits = 
@@ -162,9 +174,9 @@ let result1 lst = List.map (fun x -> f (g x)) lst ;;
 Each function should use one of List.fold, List.map or List.filter. 
 • Find those elements of a list of strings whose length is strictly greater than 3.
 • Add 1.0 to every element of a list of floats.
-• Given a list of strings strs and another string sep, produce the string that contains every element of strs
-separated by sep. For example, given inputs ["hi";"bye"] and ",", produce "hi,bye", being sure not to
-produce an extra comma either at the beginning or end of the result string.*)
+• Given a list of strings strs and another string sep, produce the string that contains every element of strs separated by sep. 
+For example, given inputs ["hi";"bye"] and ",", produce "hi,bye", 
+being sure not to produce an extra comma either at the beginning or end of the result string.*)
 let string_3 lst = List.filter (fun s -> String.length s > 3) lst
 (*val string_3 : string list -> string list = <fun>*)
 
@@ -172,8 +184,8 @@ let add_1_float lst = List.map (fun a -> a +. 1.0) lst
 (*val add_1_float : float list -> float list = <fun>*)
 
 let string_concat strs sep = match strs with
-  | [] -> ""
-  | hd :: tl -> List.fold_left (fun acc s -> acc ^ sep ^ s) hd tl;;
+| [] -> ""
+| hd :: tl -> List.fold_left (fun acc s -> acc ^ sep ^ s) hd tl;;
 (*val string_concat : string list -> string -> string = <fun>*)
 
 (*Example - *)
@@ -195,25 +207,32 @@ let keys1 assoc_list =
   List.fold_left (fun acc (key, _) ->
     if List.mem key acc then acc     (* Skip if the key is already in the accumulator *)
     else key :: acc) [] assoc_list     (* Add the key to the accumulator otherwise *)
-  |> List.rev;;                  (* Reverse the result to maintain the original order of appearance *)
-(*val keys : ('a * 'b) list -> 'a list = <fun>*)
+  |> List.rev;;           (* Reverse the result to maintain the original order of appearance *)
+(* OR *)
+let keys2 assoc_list =
+  let add_key key2 (key, _) =
+    if List.mem key key2 then key2
+    else key :: key2
+  in
+  List.fold_left add_key [] assoc_list;;
+(*val keys1/keys2 : ('a * 'b) list -> 'a list = <fun>*)
 
 (*Example - *)
 keys [("apple", 1); ("banana", 2); ("orange", 3); ("apple", 4); ("grape", 5); ("lichi", 6)];;
 keys1 [("apple", 1); ("banana", 2); ("orange", 3); ("apple", 4); ("grape", 5); ("lichi", 6)];;
 
 
-(*14. Implement a function is_valid_matrix: int list list -> bool that returns whether the input matrix is valid or not.*)
+(*15. Implement a function is_valid_matrix: int list list -> bool that returns whether the input matrix is valid or not.*)
 let is_valid_matrix matrix = match matrix with
-  | [] -> false
-  | row :: rows ->
-    let num_cols = List.length row in
-    let valid_row row' = List.length row' = num_cols in
-    List.for_all valid_row rows;;
+| [] -> false
+| row :: rows ->
+  let num_cols = List.length row in
+  let valid_row row' = List.length row' = num_cols in
+  List.for_all valid_row rows;;
 (*val is_valid_matrix : 'a list list -> bool = <fun>*)
 
 
-(*15. Implement a function add_row_vectors: int list -> int list -> int that does list for the element-wise addition of two row vectors.*)
+(*16. Implement a function add_row_vectors: int list -> int list -> int that does list for the element-wise addition of two row vectors.*)
 let add_row_vectors vect1 vect2 = List.map2 (+) vect1 vect2
 (*val add_row_vectors : int list -> int list -> int list = <fun>*)
 
@@ -228,35 +247,49 @@ let rec add_row_vectors1 v1 v2 = match (v1, v2) with
 add_row_vectors1 [1; 1; 1] [9; 8; 7];;
 
 
-(*16. Implement a function add_matrices: int list -> int list -> int list for matrix addition.*)
-let add_matrices vector1 vector2 = add_row_vectors vector1 vector2
+(*17. Implement a function add_matrices: int list -> int list -> int list for matrix addition.*)
+let add_matrices matrix1 matrix2 =
+  List.map2 add_row_vectors matrix1 matrix2 ;;
+(* OR *)
+let add_matrices matrix1 matrix2 =
+  let add_rows row1 row2 =
+    List.map2 ( + ) row1 row2
+  in
+  List.map2 add_rows matrix1 matrix2 ;;
 (*val add_matrices : int list -> int list -> int list = <fun>*)
 
+(*Example :- *)
+add_matrices [[1; 2; 3]; [4; 5; 6](* OR *); [7; 8; 9]] [[9; 8; 7]; [6; 5; 4]; [3; 2; 1]];;
+(*- : int list list = [[10; 10; 10]; [10; 10; 10]; [10; 10; 10]]*)
 
-(*17. Implement a function multiply_matrices: int list list -> int list list -> int list list for matrix multiplication.*)
-let transpose_matrix matrix =
-  match matrix with
-  | [] -> []
-  | [] :: _ -> invalid_arg "Invalid Matrix!"
-  | _ ->
-    let num_rows = List.length matrix in
-    let num_cols = List.length (List.hd matrix) in
-    let transposed = Array.make_matrix num_cols num_rows 0 in
-    for i = 0 to num_rows - 1 do
-      for j = 0 to num_cols - 1 do
-        transposed.(j).(i) <- List.nth (List.nth matrix i) j
-      done
-    done;
-    Array.to_list (Array.map Array.to_list transposed)
+
+(*18. Implement a function multiply_matrices: int list list -> int list list -> int list list for matrix multiplication.*)
+let transpose_matrix matrix = match matrix with
+| [] -> []
+| [] :: _ -> invalid_arg "Invalid Matrix!"
+| _ ->
+  let num_rows = List.length matrix in
+  let num_cols = List.length (List.hd matrix) in
+  let transposed = Array.make_matrix num_cols num_rows 0 in
+  for i = 0 to num_rows - 1 do
+    for j = 0 to num_cols - 1 do
+      transposed.(j).(i) <- List.nth (List.nth matrix i) j
+    done
+  done;
+  Array.to_list (Array.map Array.to_list transposed) ;;
+(*val transpose_matrix : int list list -> int list list = <fun>*)
 
 let dot_product vector1 vector2 =
-  List.fold_left2 (fun acc x1 x2 -> acc + (x1 * x2)) 0 vector1 vector2
+  List.fold_left2 (fun acc x1 x2 -> acc + (x1 * x2)) 0 vector1 vector2 ;;
+(*val dot_product : int list -> int list -> int = <fun>*)
 
 let multiply_matrices matrix1 matrix2 =
   let transposed_matrix2 = transpose_matrix matrix2 in
-  List.map (fun row1 -> List.map (fun col2 -> dot_product row1 col2) transposed_matrix2) matrix1
+  List.map (fun row1 -> List.map (fun col2 -> dot_product row1 col2) transposed_matrix2) matrix1 ;;
 (*val multiply_matrices : int list list -> int list list -> int list list = <fun>*)
 
 (*Example :- *)
-multiply_matrices [[1; 2; 3]; [4; 5; 6]] [[7; 8]; [9; 10]; [11;5]];;
-(*- : int list list = [[58; 43]; [139; 112]]*)
+multiply_matrices [[1; 2; 3]; [4; 5; 6]] [[7; 8]; [9; 10]; [11; 12]];;
+(*- : int list list = [[58; 64]; [139; 154]]*)
+
+(* ================================================================================================================================== *)

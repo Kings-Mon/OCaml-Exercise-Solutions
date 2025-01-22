@@ -37,7 +37,7 @@ let first_two_equal = function
 (*val first_two_equal : 'a list -> bool = <fun>*)
 
 
-(*A function that returns the fifth element of that list*)
+(*A function that returns the fifth element of that list.*)
 let fifth_element_check lst = 
   if List.length lst >= 5 
     then List.nth lst 4
@@ -45,9 +45,11 @@ let fifth_element_check lst =
 (*val fifth_element_check : int list -> int = <fun>*)
 
 
-(*A function that returns the list sorted in descending order*)
-let decending_sort lst =
-  List.sort (fun x y -> Stdlib.compare y x) lst;;
+(*A function that returns the list sorted in descending order.*)
+let desc_sort lst = List.rev(List.sort (fun a b -> Stdlib.compare a b) lst);;
+(*val desc_sort : 'a list -> 'a list = <fun>*)
+(* OR  *)
+let decending_sort lst = List.sort (fun x y -> Stdlib.compare y x) lst;;
 (*val decending_sort : 'a list -> 'a list = <fun>*)
 
 
@@ -77,6 +79,10 @@ let rec take n lst = match n, lst with
 | 0, _ -> []
 | _, [] -> []
 | n, h :: t -> h :: take (n-1) t;;
+(* OR  *)
+let rec take n lst = match lst with
+| [] -> []
+| h :: t -> if n <= 0 then [] else h :: take (n-1) t;;
 (*val take : int -> 'a list -> 'a list = <fun>*)
 
 
@@ -85,6 +91,10 @@ let rec drop n lst = match n, lst with
 | 0, _ -> lst
 | _, [] -> []
 | n, _ :: t -> drop (n-1) t;;
+(* OR *)
+let rec drop n lst = match lst with
+| [] -> []
+| _ :: t -> if n <= 0 then lst  else drop (n -1) t;;
 (*val drop : int -> 'a list -> 'a list = <fun>*)
 
 
@@ -193,9 +203,9 @@ let rec is_unimodal lst = match lst with
 (*A function that takes a set S represented as a list and returns the set of all subsets of S.*)
 let rec powerset s = match s with
 | [] -> [[]]
-| x :: rest -> 
-  let rest_set = powerset rest in
-  rest_set @ List.map (fun subset -> x :: subset) rest_set;;
+| h :: tail -> 
+  let rest_set = powerset tail in
+  rest_set @ List.map (fun subset -> h :: subset) rest_set;;
 (*val powerset : 'a list -> 'a list list = <fun>*)
 
 

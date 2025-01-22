@@ -2,7 +2,7 @@
 (* ======================================================================================================================= *)
 
 (*The product of all the elements in a list.*)
-let rec product = function
+let rec product lst = match lst with
 | [] -> 1
 | h :: t -> h * product t;;
 (*val product : int list -> int = <fun>*)
@@ -49,8 +49,8 @@ let fifth_element_check lst =
 let desc_sort lst = List.rev(List.sort (fun a b -> Stdlib.compare a b) lst);;
 (*val desc_sort : 'a list -> 'a list = <fun>*)
 (* OR  *)
-let decending_sort lst = List.sort (fun x y -> Stdlib.compare y x) lst;;
-(*val decending_sort : 'a list -> 'a list = <fun>*)
+let descending_sort lst = List.sort (fun x y -> Stdlib.compare y x) lst;;
+(*val descending_sort : 'a list -> 'a list = <fun>*)
 
 
 (*A function that returns the last element of a list.*)
@@ -67,11 +67,9 @@ let last_element_return_1 n lst =
 
 (*A function that returns true if and only if the input list contains at least one 0.*)
 let any_zeroes lst = List.exists (fun x -> x = 0) lst;;
+(* OR *)
+let any_zeroes lst = List.mem 0 lst;;
 (*val any_zeroes : int list -> bool = <fun>*)
-
-(* Alternatively, *)
-let any_zeroes_1 lst = List.mem 0 lst;;
-(*val any_zeroes_1 : int list -> bool = <fun>*)
 
 
 (*A function that returns the first n elements of lst.*)
@@ -358,10 +356,8 @@ insert 1 "one" (insert 2 "two" (insert 3 "three" (insert 4 "four"[])));;
 let rec lookup k = function
 | [] -> None
 | (k', v) :: t ->
-  if k = k' then
-    Some v
-  else
-    lookup k t;;
+  if k = k' then Some v
+  else lookup k t;;
 (*val lookup : 'a -> ('a * 'b) list -> 'b option = <fun>*)
 
 (*Example - *)
